@@ -1,0 +1,259 @@
+{
+  "case_preserved": true,
+  "combined": {
+    "example_count": 1766,
+    "lengths": {
+      "context": {
+        "before_special_tokens": {
+          "maximum": 1201,
+          "median": 61.0,
+          "p95": 140.75
+        },
+        "counts_exceeding_final_sequence_length": {
+          "256": 7,
+          "512": 2
+        },
+        "final_including_special_tokens": {
+          "maximum": 1203,
+          "median": 63.0,
+          "p95": 142.75
+        }
+      },
+      "following": {
+        "before_special_tokens": {
+          "maximum": 610,
+          "median": 17.0,
+          "p95": 51.75
+        },
+        "counts_exceeding_final_sequence_length": {
+          "256": 2,
+          "512": 1
+        },
+        "final_including_special_tokens": {
+          "maximum": 612,
+          "median": 19.0,
+          "p95": 53.75
+        }
+      },
+      "preceding": {
+        "before_special_tokens": {
+          "maximum": 419,
+          "median": 15.0,
+          "p95": 52.0
+        },
+        "counts_exceeding_final_sequence_length": {
+          "256": 1,
+          "512": 0
+        },
+        "final_including_special_tokens": {
+          "maximum": 421,
+          "median": 17.0,
+          "p95": 54.0
+        }
+      },
+      "target": {
+        "before_special_tokens": {
+          "maximum": 399,
+          "median": 23.0,
+          "p95": 59.0
+        },
+        "counts_exceeding_final_sequence_length": {
+          "256": 2,
+          "512": 0
+        },
+        "final_including_special_tokens": {
+          "maximum": 401,
+          "median": 25.0,
+          "p95": 61.0
+        }
+      }
+    },
+    "ordinary_right_truncation_target_effect": {
+      "256": {
+        "complete_removal": 1,
+        "partial_removal": 3
+      },
+      "512": {
+        "complete_removal": 0,
+        "partial_removal": 1
+      }
+    }
+  },
+  "description": "Actual fast-tokenizer lengths; source text and token sequences are omitted.",
+  "final_lengths_include_special_tokens": true,
+  "model_repository": "distilbert/distilroberta-base",
+  "model_revision": "fb53ab8802853c8e4fbdbcd0529f21fc6f459b2b",
+  "normalization": "\" \".join(text.split())",
+  "ordinary_context_order": [
+    "preceding",
+    "target",
+    "following"
+  ],
+  "ordinary_context_separator": "newline between nonempty fields",
+  "partitions": {
+    "dev_tune": {
+      "example_count": 171,
+      "lengths": {
+        "context": {
+          "before_special_tokens": {
+            "maximum": 369,
+            "median": 59.0,
+            "p95": 112.5
+          },
+          "counts_exceeding_final_sequence_length": {
+            "256": 1,
+            "512": 0
+          },
+          "final_including_special_tokens": {
+            "maximum": 371,
+            "median": 61.0,
+            "p95": 114.5
+          }
+        },
+        "following": {
+          "before_special_tokens": {
+            "maximum": 81,
+            "median": 18.0,
+            "p95": 45.0
+          },
+          "counts_exceeding_final_sequence_length": {
+            "256": 0,
+            "512": 0
+          },
+          "final_including_special_tokens": {
+            "maximum": 83,
+            "median": 20.0,
+            "p95": 47.0
+          }
+        },
+        "preceding": {
+          "before_special_tokens": {
+            "maximum": 208,
+            "median": 15.0,
+            "p95": 45.5
+          },
+          "counts_exceeding_final_sequence_length": {
+            "256": 0,
+            "512": 0
+          },
+          "final_including_special_tokens": {
+            "maximum": 210,
+            "median": 17.0,
+            "p95": 47.5
+          }
+        },
+        "target": {
+          "before_special_tokens": {
+            "maximum": 122,
+            "median": 24.0,
+            "p95": 51.0
+          },
+          "counts_exceeding_final_sequence_length": {
+            "256": 0,
+            "512": 0
+          },
+          "final_including_special_tokens": {
+            "maximum": 124,
+            "median": 26.0,
+            "p95": 53.0
+          }
+        }
+      },
+      "ordinary_right_truncation_target_effect": {
+        "256": {
+          "complete_removal": 0,
+          "partial_removal": 1
+        },
+        "512": {
+          "complete_removal": 0,
+          "partial_removal": 0
+        }
+      }
+    },
+    "train": {
+      "example_count": 1595,
+      "lengths": {
+        "context": {
+          "before_special_tokens": {
+            "maximum": 1201,
+            "median": 61.0,
+            "p95": 143.29999999999995
+          },
+          "counts_exceeding_final_sequence_length": {
+            "256": 6,
+            "512": 2
+          },
+          "final_including_special_tokens": {
+            "maximum": 1203,
+            "median": 63.0,
+            "p95": 145.29999999999995
+          }
+        },
+        "following": {
+          "before_special_tokens": {
+            "maximum": 610,
+            "median": 17.0,
+            "p95": 52.0
+          },
+          "counts_exceeding_final_sequence_length": {
+            "256": 2,
+            "512": 1
+          },
+          "final_including_special_tokens": {
+            "maximum": 612,
+            "median": 19.0,
+            "p95": 54.0
+          }
+        },
+        "preceding": {
+          "before_special_tokens": {
+            "maximum": 419,
+            "median": 15.0,
+            "p95": 53.0
+          },
+          "counts_exceeding_final_sequence_length": {
+            "256": 1,
+            "512": 0
+          },
+          "final_including_special_tokens": {
+            "maximum": 421,
+            "median": 17.0,
+            "p95": 55.0
+          }
+        },
+        "target": {
+          "before_special_tokens": {
+            "maximum": 399,
+            "median": 23.0,
+            "p95": 60.0
+          },
+          "counts_exceeding_final_sequence_length": {
+            "256": 2,
+            "512": 0
+          },
+          "final_including_special_tokens": {
+            "maximum": 401,
+            "median": 25.0,
+            "p95": 62.0
+          }
+        }
+      },
+      "ordinary_right_truncation_target_effect": {
+        "256": {
+          "complete_removal": 1,
+          "partial_removal": 2
+        },
+        "512": {
+          "complete_removal": 0,
+          "partial_removal": 1
+        }
+      }
+    }
+  },
+  "partitions_inspected": [
+    "train",
+    "dev_tune"
+  ],
+  "percentile_method": "linear interpolation",
+  "tokens_before_special_tokens": true
+}

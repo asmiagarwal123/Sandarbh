@@ -1,0 +1,60 @@
+{
+  "available_memory_before_benchmark_bytes": 1078607872,
+  "configurations": [
+    {
+      "device": "cpu",
+      "includes_forward_backward_optimizer_and_gradient_reset": true,
+      "mean_seconds_per_step": 2.2443421333446167,
+      "measured_steps": 3,
+      "microbatch_size": 1,
+      "outputs_finite": true,
+      "peak_gpu_memory_bytes": null,
+      "precision": "float32",
+      "process_peak_rss_bytes_observed_at_step_boundaries": 1723547648,
+      "sequence_length": 256,
+      "status": "COMPLETED",
+      "step_seconds": [
+        2.1841024000314064,
+        2.418333999987226,
+        2.130590000015218
+      ],
+      "warmup_steps": 1
+    },
+    {
+      "device": "cpu",
+      "includes_forward_backward_optimizer_and_gradient_reset": true,
+      "mean_seconds_per_step": 3.233629900011389,
+      "measured_steps": 3,
+      "microbatch_size": 2,
+      "outputs_finite": true,
+      "peak_gpu_memory_bytes": null,
+      "precision": "float32",
+      "process_peak_rss_bytes_observed_at_step_boundaries": 1657356288,
+      "sequence_length": 256,
+      "status": "COMPLETED",
+      "step_seconds": [
+        3.284591300005559,
+        3.0341020000050776,
+        3.382196400023531
+      ],
+      "warmup_steps": 1
+    }
+  ],
+  "device": "cpu",
+  "overall_elapsed_seconds": 85.39564850000897,
+  "precision": "float32",
+  "sequence_length_512_speed_unmeasured": true,
+  "status": "COMPLETED",
+  "synthetic_only": true,
+  "three_epoch_extrapolation": {
+    "based_on_microbatch_size": 2,
+    "calculation": "ceil(1595 / microbatch_size) * 3 * measured_mean_seconds_per_step",
+    "epochs": 3,
+    "estimated_seconds": 7741.309980627266,
+    "mean_seconds_per_step": 3.233629900011389,
+    "qualification": "Linear extrapolation only; validation, checkpointing, variable lengths, data loading, and hardware load are excluded.",
+    "steps_per_epoch_ceiling": 798,
+    "total_optimizer_steps": 2394
+  },
+  "updated_weights_and_optimizer_state_discarded": true
+}

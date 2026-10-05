@@ -1,0 +1,8 @@
+# Exact wheel-only Phase 3 environment resolved on CPython 3.14.0, Windows x86-64.
+cloudpickle==3.1.2
+joblib==1.6.0
+narwhals==2.26.0
+numpy==2.5.3
+scikit-learn==1.9.1
+scipy==1.18.1
+threadpoolctl==3.7.0

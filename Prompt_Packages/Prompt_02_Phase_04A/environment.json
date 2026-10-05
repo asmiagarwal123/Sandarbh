@@ -1,0 +1,55 @@
+{
+  "actual_device": "cpu",
+  "cpu": {
+    "logical_processor_count": 18,
+    "model": "Intel(R) Core(TM) Ultra 5 125H"
+  },
+  "dependency_versions": {
+    "huggingface_hub": "1.33.0",
+    "numpy": "2.5.3",
+    "psutil": "7.2.2",
+    "python": "3.14.0",
+    "safetensors": "0.8.0",
+    "tokenizers": "0.23.2",
+    "torch": "2.14.1+cpu",
+    "transformers": "5.18.0"
+  },
+  "disk": {
+    "available_bytes": 294483787776,
+    "path": "C:\\Users\\asmi\\Desktop\\Projects\\NLP",
+    "total_bytes": 1021821579264
+  },
+  "display_adapters": [
+    {
+      "adapter_memory_bytes": 2147479552,
+      "driver_version": "32.0.101.8132",
+      "name": "Intel(R) Arc(TM) Graphics"
+    }
+  ],
+  "memory": {
+    "available_bytes": 1078607872,
+    "total_bytes": 16573128704
+  },
+  "nvidia_smi": {
+    "available": false,
+    "output": ""
+  },
+  "os": {
+    "architecture": "AMD64",
+    "description": "Windows-11-10.0.26200-SP0",
+    "release": "11",
+    "system": "Windows",
+    "version": "10.0.26200"
+  },
+  "python": {
+    "executable": "C:\\Users\\asmi\\Desktop\\Projects\\NLP\\.venv-transformers\\Scripts\\python.exe",
+    "implementation": "CPython",
+    "version": "3.14.0"
+  },
+  "pytorch": {
+    "cuda_devices": [],
+    "cuda_is_available": false,
+    "cuda_version": null,
+    "version": "2.14.1+cpu"
+  }
+}

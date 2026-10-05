@@ -1,0 +1,399 @@
+Implement Phase 3 of SANDARBH: classical NLP baselines using TF-IDF, Logistic Regression, and Linear SVM.
+
+Project:
+C:\Users\asmi\Desktop\Projects\NLP
+
+Implement the code and run focused synthetic checks. Do not train on AUTALIC during this implementation turn. The user will run the real training command manually.
+
+## 1. Existing state
+
+Inspect the current workspace and any applicable project instructions before editing.
+
+Completed phases:
+- Phase 1: dataset audit.
+- Phase 2A: exact-overlap grouping review.
+- Phase 2B: binary targets and frozen partitions.
+
+Rule B is approved. Preserve all existing groups, labels, and partitions.
+
+Verified partition counts:
+
+| Partition | Examples | Groups | Hard positives | Hard other |
+|---|---:|---:|---:|---:|
+| train | 1595 | 998 | 180 | 1415 |
+| dev_tune | 171 | 107 | 19 | 152 |
+| dev_calibration | 171 | 107 | 19 | 152 |
+| test | 341 | 213 | 38 | 303 |
+
+Source SHA-256:
+66ccaa43f9f3d8694c4826d8b999a4e562041637cad3c8c396590fbe78d3d408
+
+Phase 2B generated-artifact hashes:
+- split_manifest.csv:
+  fef7b3c036a5841bb13aadf0271f0da18b81f03fa4ca44b86300e3d08463aa76
+- targets.csv:
+  e72ca8a447f91428d83e51217cedec90950bb2d2c4dfb64ad1ae338f40e7fd76
+
+Calculate current hashes and compare them. Never force reference values.
+
+The uploaded Phase 2B artifacts report COMPLETED/FROZEN and successful prepublication validation. The research controller also independently reconciled targets, membership, and exact-overlap separation.
+
+The latest project-wide test output and separately executed validator output were not supplied to the controller. Do not claim those manual actions occurred.
+
+## 2. Experiments to implement
+
+Implement four experiments:
+
+E1: TF-IDF + Logistic Regression, target text only.
+E2: TF-IDF + Logistic Regression, preceding + target + following.
+E3: TF-IDF + LinearSVC, target text only.
+E4: TF-IDF + LinearSVC, preceding + target + following.
+
+Also implement one majority-class dummy benchmark:
+- Determine the majority class from train only.
+- Evaluate it on dev_tune.
+- Do not treat it as a competitive model selected for later deployment.
+
+Use hard_label for all Phase 3 model fitting and selection.
+
+Do not implement transformers, soft-target training, calibration, selective prediction, a UI, or final test evaluation in this phase.
+
+## 3. Preserve previous phases
+
+Read existing:
+- RESEARCH_PROTOCOL.md
+- Partition configuration and implementation
+- Frozen partition artifacts and provenance
+- Existing project structure, requirements, tests, and README
+
+Use the existing partition validator as a read-only prerequisite where practical.
+
+Do not modify:
+- AUTALIC.csv
+- Previous phase scripts or configurations
+- Frozen targets and partitions
+- Historical reports or manual-review notes
+
+Add a separate Phase 3 protocol document. Update README and implementation history narrowly.
+
+If a genuine upstream defect is found, explain it and stop the affected work. Do not repair it by generating a different split.
+
+## 4. Environment and dependencies
+
+Inspect Python, architecture, installed dependencies, and any existing virtual environment.
+
+The recorded Python version is 3.14.0 on Windows. Do not assume this requires a downgrade.
+
+Use a project-local .venv:
+- Reuse it if suitable.
+- Otherwise create it using the existing Python.
+- Do not alter the global Python installation.
+- Do not delete or replace an existing environment blindly.
+
+You may install the minimal baseline dependencies into .venv for implementation and synthetic checks.
+
+Use stable packages from official PyPI. Verify compatible Windows wheels before installation. Prefer binary wheels; do not initiate source builds.
+
+Use scikit-learn and its required numerical dependencies. Use joblib for model serialization if appropriate. Avoid adding pandas, plotting packages, transformers, or torch for this phase.
+
+Create requirements-baselines.txt with exact versions of the resolved working dependencies. Record Python and package versions.
+
+Consult official scikit-learn documentation for the installed version. Avoid deprecated or removed parameter combinations.
+
+If package installation is unavailable or fails, report the exact issue and manual setup command. Do not claim skipped ML tests passed.
+
+Use .venv\Scripts\python.exe explicitly in Windows commands so activation and PowerShell execution-policy changes are unnecessary.
+
+## 5. Input construction
+
+Resolve examples by stable IDs against the immutable CSV.
+
+For each text field:
+- Collapse whitespace runs to one space.
+- Strip leading/trailing whitespace.
+- Preserve punctuation and wording.
+- Do not stem, lemmatize, remove stopwords, or apply custom replacements.
+- Let the declared vectorizer handle lowercasing.
+
+Target-only input:
+- target
+
+Context input:
+- Nonempty preceding, target, following fields, in that order.
+- Join with a newline.
+- Retain the target exactly once.
+- Missing preceding context is allowed.
+- Do not insert labels, annotation fractions, row IDs, group IDs, or split names into model input.
+
+Document that these are standard concatenated-text baselines. The vectorizer does not explicitly model sentence roles.
+
+No text truncation is needed for these sparse baselines.
+
+Do not use the overlap-normalization policy as an excuse to change the frozen source or introduce additional model preprocessing.
+
+## 6. Partition access boundaries
+
+Fit models and vectorizers exclusively on train.
+
+Use dev_tune only for:
+- Candidate scoring
+- Hyperparameter selection
+- Development predictions and reporting
+
+Do not vectorize, predict on, or score dev_calibration or test.
+
+Reading their IDs or running the existing dataset-integrity validator is allowed. This does not authorize model-facing use of their text or labels.
+
+Implement an explicit modeling-loader allowlist containing only:
+- train
+- dev_tune
+
+Attempts to request test or dev_calibration through this Phase 3 modeling interface must fail clearly.
+
+Do not refit selected models on train + dev_tune.
+Do not perform automatic cross-validation over all available examples.
+
+## 7. Fixed feature and model configuration
+
+Use a scikit-learn Pipeline containing the TF-IDF vectorizer and classifier.
+
+Fixed TF-IDF settings:
+- analyzer: word
+- lowercase: true
+- ngram_range: [1, 2]
+- min_df: 2
+- max_df: 1.0
+- max_features: 30000
+- sublinear_tf: true
+- norm: l2
+- use_idf: true
+- smooth_idf: true
+- stop_words: null
+- dtype: float64
+- Standard scikit-learn token pattern, recorded explicitly
+
+Fit vocabulary, document frequencies, and IDF only on train.
+
+For both model families, use this exact candidate grid:
+- C: [0.1, 1.0, 10.0]
+- class_weight: [null, "balanced"]
+
+This gives six candidates per experiment and 24 total real fits.
+
+Logistic Regression:
+- L2 regularization
+- solver: lbfgs
+- max_iter: 5000
+- tol: 0.0001
+- random_state: 42 where supported
+
+LinearSVC:
+- L2 penalty
+- squared_hinge loss
+- dual: true
+- max_iter: 10000
+- tol: 0.0001
+- random_state: 42
+
+Use the installed version’s supported syntax to express these settings. Record effective estimator parameters.
+
+Do not expand the grid after observing results.
+
+Treat convergence warnings as an unresolved condition:
+- Record the affected candidate.
+- Do not silently accept it as a valid winner.
+- Report that the run needs review if any candidate does not converge.
+- Do not automatically change iteration limits or solver settings.
+
+## 8. Candidate selection and metrics
+
+Choose one candidate separately for each E1–E4 experiment.
+
+Selection rule:
+1. Highest dev_tune macro-F1 over labels [0, 1].
+2. If exactly tied, smaller C.
+3. If still tied, class_weight=null before "balanced".
+
+Do not use rounded displayed values for selection.
+
+Use estimator-native hard predictions:
+- Logistic Regression: estimator.predict
+- LinearSVC: estimator.predict
+
+Do not tune decision thresholds.
+
+For every candidate, report:
+- Macro-F1
+- Positive-class precision, recall, and F1
+- Accuracy
+- Balanced accuracy
+- Confusion matrix, explicitly ordered [0, 1]
+- Class support
+- Average precision from continuous positive-class scores
+- ROC-AUC where defined
+
+Call sklearn’s average_precision_score result “average precision.” Do not mislabel it as trapezoidal PR-AUC.
+
+Use zero_division=0 for undefined precision/F1 and record when no positives are predicted.
+
+Use:
+- Logistic Regression positive-class probability for ranking metrics.
+- LinearSVC decision_function margin for ranking metrics.
+
+Verify the class order explicitly.
+Never describe SVM margins as probabilities.
+Do not apply a sigmoid and call the result calibrated confidence.
+
+For Logistic Regression, native probabilities may be saved but must be described as uncalibrated.
+
+With only 19 positives in dev_tune, differences may be unstable. These are development results used for selection, not final generalization estimates.
+
+Do not select one overall project winner or drop an experiment because of these development results.
+
+## 9. Outputs
+
+Suggested implementation files:
+- configs/baselines.json
+- scripts/train_baselines.py
+- scripts/validate_baseline_run.py
+- tests/test_baselines.py
+- reports/PHASE_03_BASELINE_PROTOCOL.md
+- requirements-baselines.txt
+
+Use importable shared helpers where needed, following project conventions. Avoid unrelated restructuring.
+
+Real training outputs:
+- results/baselines/candidate_metrics.csv
+- results/baselines/selected_models.json
+- results/baselines/dev_tune_predictions.csv
+- results/baselines/dummy_metrics.json
+- results/baselines/run_manifest.json
+- results/baselines/run_status.json
+- reports/phase_03_baselines.md
+- Four selected model pipelines under models/baselines/
+
+Predictions should contain:
+- experiment_id
+- example_id
+- group_id
+- partition
+- true_hard_label
+- predicted_label
+- decision_score
+- positive_probability for LR only; blank for SVM
+
+Save selected-model predictions only. Candidate metrics cover all 24 fits.
+
+Record:
+- Input/config/code hashes
+- Frozen partition fingerprint
+- Python and dependency versions
+- Effective parameters
+- Training and scoring counts
+- Vocabulary size
+- Candidate scores and selection rationale
+- Model artifact hashes
+- Convergence status
+- Execution duration
+
+Reports, logs, and CSV outputs must not contain raw sentences.
+
+Serialized model pipelines necessarily contain learned vocabulary terms. Keep them local and ignored by Git. Do not claim serialized TF-IDF models are free of source-derived text.
+
+Do not print vocabulary or feature lists into reports during this phase.
+
+## 10. Result validation
+
+Implement a read-only validation command that checks:
+- Run completion
+- Provenance and model artifact hashes
+- Exactly four selected models
+- Exactly six candidate results per experiment
+- Candidate selection matches the declared rule
+- Saved prediction IDs match dev_tune exactly once per experiment
+- No calibration or test predictions exist
+- Metrics reconcile with saved selected-model predictions
+- Confusion matrices and supports reconcile
+- LR probabilities are finite and in [0, 1]
+- SVM probability fields are empty
+- Scores and outputs are finite
+- Saved pipelines load successfully
+
+Load only the locally generated model files whose hashes match the run manifest.
+
+Do not fit anything in this validator.
+Do not use dev_calibration or test for validation predictions.
+
+Use staged result publication and clear failure status.
+Do not overwrite a completed run silently. If rerun, verify and reuse identical-provenance results or require a separately named run directory for a deliberate new experiment.
+
+Keep the implementation proportional to these four experiments. No experiment-tracking server or generic orchestration framework is needed.
+
+## 11. Synthetic tests
+
+Cover:
+- Correct target-only and context input construction
+- Missing context
+- No labels or metadata entering text features
+- Training-only vocabulary/IDF fitting
+- A token appearing only in dev_tune does not enter the fitted vocabulary
+- Calibration/test access is rejected
+- Deterministic candidate selection and tie-breaking
+- Correct class ordering and score interpretation
+- Metric calculations on a small known example
+- No-positive-prediction handling
+- Convergence-warning handling
+- Serialization roundtrip
+- Saved-output corruption detection
+- Failed status and completed-run protection
+- Source and frozen artifact preservation
+
+You may run tiny synthetic model fits and a synthetic end-to-end CLI smoke test.
+
+Do not introduce AUTALIC text into tests.
+
+## 12. Execution boundary
+
+You MAY:
+- Inspect existing files and verify provenance read-only.
+- Prepare the local environment and pinned dependencies.
+- Compile/import new modules.
+- Run focused Phase 3 synthetic tests.
+- Run tiny synthetic training and validation smoke tests.
+
+You MUST NOT:
+- Run the full project test suite.
+- Fit a vectorizer or classifier on real AUTALIC examples.
+- Produce real E1–E4 predictions or metrics.
+- Use calibration/test data for modeling.
+- Modify or regenerate partitions.
+- Start transformer work.
+
+The user will manually run the full suite, partition validation, real baseline training, and result validation.
+
+## 13. Final response
+
+Return:
+A. Existing evidence and discrepancies
+B. Files created/changed
+C. Environment and exact dependency versions
+D. Implemented experiment and selection rules
+E. Checks actually executed
+F. Pending manual execution
+G. Exact commands in order
+H. Files to return
+I. Limitations or blockers
+
+Use these command interfaces:
+
+.\.venv\Scripts\python.exe -m unittest discover -s tests -p "test_*.py" -v
+
+.\.venv\Scripts\python.exe scripts/validate_partitions.py --config configs/partition.json
+
+.\.venv\Scripts\python.exe scripts/train_baselines.py --config configs/baselines.json
+
+.\.venv\Scripts\python.exe scripts/validate_baseline_run.py --config configs/baselines.json
+
+If environment setup is incomplete, put the required setup commands before these.
+
+Stop after Phase 3 implementation and synthetic checks.

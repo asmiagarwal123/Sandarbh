@@ -1,0 +1,6 @@
+example_id,partition,max_length,ordinary_final_length,target_token_count,retained_target_token_count,target_retention
+row-001275-20340d766567,dev_tune,256,371,122,45,partial_removal
+row-000894-a9122de2e267,train,256,1203,367,0,complete_removal
+row-000894-a9122de2e267,train,512,1203,367,90,partial_removal
+row-001378-8fcf67877b10,train,256,1044,399,222,partial_removal
+row-002372-33642aa18e3b,train,256,282,150,127,partial_removal

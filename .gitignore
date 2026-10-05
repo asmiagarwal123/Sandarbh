@@ -1,0 +1,25 @@
+# Source data and generated local outputs
+AUTALIC.csv
+results/
+reports/phase_01_dataset_audit.md
+
+# Python environments and caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Saved model artifacts (later phases)
+models/
+checkpoints/
+*.bin
+*.pt
+*.safetensors
+
+# Local editor/OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

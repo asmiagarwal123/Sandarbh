@@ -1,0 +1,84 @@
+{
+  "baseline_schema_version": "3.0.0",
+  "input_csv": "AUTALIC.csv",
+  "partition_artifacts": {
+    "config": "configs/partition.json",
+    "run_status": "results/partitions/run_status.json",
+    "summary": "results/partitions/split_summary.json",
+    "targets": "results/partitions/targets.csv",
+    "split_manifest": "results/partitions/split_manifest.csv"
+  },
+  "required_partition_fingerprint": "61c9415766e4f7b342eb37df7b09adf2f89cd86f2818ee05645ae9409dbbba86",
+  "reference_hashes": {
+    "source_sha256": "66ccaa43f9f3d8694c4826d8b999a4e562041637cad3c8c396590fbe78d3d408",
+    "targets_sha256": "e72ca8a447f91428d83e51217cedec90950bb2d2c4dfb64ad1ae338f40e7fd76",
+    "split_manifest_sha256": "fef7b3c036a5841bb13aadf0271f0da18b81f03fa4ca44b86300e3d08463aa76"
+  },
+  "modeling_partition_allowlist": ["train", "dev_tune"],
+  "experiments": [
+    {"experiment_id": "E1", "classifier": "logistic_regression", "input_mode": "target"},
+    {"experiment_id": "E2", "classifier": "logistic_regression", "input_mode": "context"},
+    {"experiment_id": "E3", "classifier": "linear_svc", "input_mode": "target"},
+    {"experiment_id": "E4", "classifier": "linear_svc", "input_mode": "context"}
+  ],
+  "tfidf": {
+    "analyzer": "word",
+    "lowercase": true,
+    "ngram_range": [1, 2],
+    "min_df": 2,
+    "max_df": 1.0,
+    "max_features": 30000,
+    "sublinear_tf": true,
+    "norm": "l2",
+    "use_idf": true,
+    "smooth_idf": true,
+    "stop_words": null,
+    "dtype": "float64",
+    "token_pattern": "(?u)\\b\\w\\w+\\b"
+  },
+  "candidate_grid": {
+    "C": [0.1, 1.0, 10.0],
+    "class_weight": [null, "balanced"]
+  },
+  "logistic_regression": {
+    "regularization": "l2 via l1_ratio=0.0; penalty parameter omitted because it is deprecated in scikit-learn 1.9.1",
+    "l1_ratio": 0.0,
+    "solver": "lbfgs",
+    "max_iter": 5000,
+    "tol": 0.0001,
+    "random_state": 42
+  },
+  "linear_svc": {
+    "penalty": "l2",
+    "loss": "squared_hinge",
+    "dual": true,
+    "max_iter": 10000,
+    "tol": 0.0001,
+    "random_state": 42
+  },
+  "selection": {
+    "primary": "highest unrounded dev_tune macro-F1 over labels [0, 1]",
+    "tie_break_1": "smaller C",
+    "tie_break_2": "class_weight null before balanced"
+  },
+  "expected_versions": {
+    "python": "3.14.0",
+    "cloudpickle": "3.1.2",
+    "joblib": "1.6.0",
+    "narwhals": "2.26.0",
+    "numpy": "2.5.3",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "threadpoolctl": "3.7.0"
+  },
+  "outputs": {
+    "candidate_metrics": "results/baselines/candidate_metrics.csv",
+    "selected_models": "results/baselines/selected_models.json",
+    "dev_predictions": "results/baselines/dev_tune_predictions.csv",
+    "dummy_metrics": "results/baselines/dummy_metrics.json",
+    "run_manifest": "results/baselines/run_manifest.json",
+    "run_status": "results/baselines/run_status.json",
+    "report": "reports/phase_03_baselines.md",
+    "model_directory": "models/baselines"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "review_schema_version": "2A-1.0.0",
+  "input_csv": "AUTALIC.csv",
+  "audit_script": "scripts/audit_dataset.py",
+  "audit_config": "configs/audit.json",
+  "audit_artifacts": {
+    "run_status": "results/audit/run_status.json",
+    "summary": "results/audit/summary.json",
+    "row_manifest": "results/audit/row_manifest.csv",
+    "exclusions": "results/audit/exclusions.csv",
+    "overlap_links": "results/audit/overlap_links.csv",
+    "report": "reports/phase_01_dataset_audit.md"
+  },
+  "minimum_substantial_word_count": 5,
+  "normalization": "Join Unicode-whitespace-separated tokens with one ASCII space, then apply Unicode casefold. Matching only; not model-input preprocessing.",
+  "reference_observations": {
+    "five_word_components_total_groups": 1462,
+    "five_word_components_singletons": 1020,
+    "five_word_components_largest_size": 17,
+    "all_nonempty_components_total_groups": 1425,
+    "all_nonempty_components_singletons": 988,
+    "all_nonempty_components_largest_size": 22
+  },
+  "outputs": {
+    "group_membership": "results/overlap_review/group_membership.csv",
+    "group_summary": "results/overlap_review/group_summary.csv",
+    "policy_comparison": "results/overlap_review/policy_comparison.json",
+    "manual_review": "results/overlap_review/manual_review.csv",
+    "run_status": "results/overlap_review/run_status.json",
+    "report": "reports/phase_02a_overlap_review.md"
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "benchmark_status": "COMPLETED",
+  "code_and_config_hashes": {
+    "config": "b873fbeefb68c590e70e5f1640c16461051130a5c1677d07a1fe84dd90e0b89f",
+    "plan": "7ec37369c3afdbdfbd91ec274f994b952d71e95979c4a652dd6d6e2083ffbfa1",
+    "requirements": "7ee82568290033eb8296c1939065d10d800c43a10798908a04e7523e75cf5c5a",
+    "script": "cbc4f08990e40d5902c23c24b2683a1f50df5e017c124f5d99c343785599a098"
+  },
+  "input_hashes": {
+    "config": "68a3fb5645416bd715e2fb6c25e2af8dfe8225a2b10a30374cd21049f946ecf6",
+    "run_status": "5bcf2664484f56e472b78522a16849df0a722c822f2be7c77593e5fcda60745a",
+    "source": "66ccaa43f9f3d8694c4826d8b999a4e562041637cad3c8c396590fbe78d3d408",
+    "split_manifest": "fef7b3c036a5841bb13aadf0271f0da18b81f03fa4ca44b86300e3d08463aa76",
+    "summary": "acb3194514bca09dcdb6ddda40a4de3e9b381d47deb2bdbffd67298ceaebff3f",
+    "targets": "e72ca8a447f91428d83e51217cedec90950bb2d2c4dfb64ad1ae338f40e7fd76"
+  },
+  "model": {
+    "repository": "distilbert/distilroberta-base",
+    "requested_revision": "fb53ab8802853c8e4fbdbcd0529f21fc6f459b2b",
+    "resolved_revision": "fb53ab8802853c8e4fbdbcd0529f21fc6f459b2b",
+    "trust_remote_code": false,
+    "weight_format": "safetensors"
+  },
+  "model_verification": {
+    "binary_logits_shape": [
+      2,
+      2
+    ],
+    "classification_head_initialization": {
+      "expected": true,
+      "interpretation": "A new binary classification head is expected and is not evidence of a failed base-model download.",
+      "missing_keys": [
+        "classifier.dense.bias",
+        "classifier.dense.weight",
+        "classifier.out_proj.bias",
+        "classifier.out_proj.weight"
+      ],
+      "unexpected_keys": [
+        "lm_head.bias",
+        "lm_head.dense.bias",
+        "lm_head.dense.weight",
+        "lm_head.layer_norm.bias",
+        "lm_head.layer_norm.weight",
+        "roberta.pooler.dense.bias",
+        "roberta.pooler.dense.weight"
+      ],
+      "warning_messages": []
+    },
+    "logits_finite": true,
+    "model_loaded": true,
+    "special_tokens": {
+      "bos_token": "<s>",
+      "cls_token": "<s>",
+      "eos_token": "</s>",
+      "mask_token": "<mask>",
+      "pad_token": "<pad>",
+      "sep_token": "</s>",
+      "unk_token": "<unk>"
+    },
+    "token_ids_valid": true,
+    "tokenizer_fast": true,
+    "tokenizer_vocabulary_size": 50265
+  },
+  "not_performed": [
+    "AUTALIC transformer fine-tuning",
+    "dev_calibration tokenization",
+    "test tokenization",
+    "real classification prediction",
+    "calibration",
+    "threshold selection",
+    "final evaluation"
+  ],
+  "output_hashes": {
+    "benchmark": "6d42680e50cbabe28cda386c71c4eaed768927b085c7a66c7412753e1936783d",
+    "environment": "ea8a3606e8bcb8833f5f71a32741150bd8a6ddc0ba8c7fd31cfd48c27e39681b",
+    "token_length_summary": "e8999d74df6f027bde5fa45c5b1363eda8b6257de42cd0605984bcc63d708a72",
+    "truncation_examples": "9e5fd01dec472ffc01d2b31aa898c6c3779e7c4ee4f0d79aac18863d709cafde"
+  },
+  "partition_fingerprint": "61c9415766e4f7b342eb37df7b09adf2f89cd86f2818ee05645ae9409dbbba86",
+  "preflight_schema_version": "4A-1.0.0",
+  "proposed_input_policy": {
+    "basis": "Actual tokenizer length and target-retention diagnostics plus measured hardware readiness; labels and model performance were not used.",
+    "context_allocation": "split remaining tokens equally; preceding keeps its tail and following keeps its head; redistribute unused slots deterministically",
+    "hard_and_soft_context_inputs_identical": true,
+    "marker_token_counts": {
+      "following": 4,
+      "preceding": 6,
+      "target": 3
+    },
+    "maximum_retained_target_tokens": 241,
+    "missing_context": "Keep the marker and use zero content tokens; redistribute unused content capacity deterministically.",
+    "ordering": [
+      "outer_start",
+      "preceding_marker",
+      "preceding_tail",
+      "target_marker",
+      "target_prefix",
+      "following_marker",
+      "following_head",
+      "outer_end"
+    ],
+    "ordinary_right_truncation_affected_at_recommended_length": {
+      "complete_removal": 1,
+      "partial_removal": 3
+    },
+    "outer_special_token_count": 2,
+    "overlong_target": "retain the leftmost target-token prefix after reserving all special-token and marker tokens",
+    "recommended_max_length": 256,
+    "status": "PROPOSED_NOT_APPROVED_OR_TRAINED",
+    "target_only_and_context_same_target_retention_rule": true
+  },
+  "real_fine_tuning_performed": false,
+  "real_predictions_generated": false,
+  "status": "COMPLETED",
+  "timestamp_utc": "2026-10-05T09:18:53.616416Z",
+  "tokenization_counts": {
+    "dev_tune": 171,
+    "train": 1595
+  },
+  "tokenization_partitions_accessed": [
+    "train",
+    "dev_tune"
+  ],
+  "training_feasibility_recommendation": "FUNCTIONALLY_FEASIBLE"
+}

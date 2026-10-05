@@ -1,0 +1,58 @@
+{
+  "audit_schema_version": "1.0.0",
+  "input_csv": "AUTALIC.csv",
+  "expected_columns": [
+    "preceding",
+    "target",
+    "following",
+    "A1_Score",
+    "A2_Score",
+    "A3_Score"
+  ],
+  "text_columns": ["preceding", "target", "following"],
+  "annotation_columns": ["A1_Score", "A2_Score", "A3_Score"],
+  "outputs": {
+    "summary": "results/audit/summary.json",
+    "row_manifest": "results/audit/row_manifest.csv",
+    "exclusions": "results/audit/exclusions.csv",
+    "overlap_links": "results/audit/overlap_links.csv",
+    "report": "reports/phase_01_dataset_audit.md",
+    "run_status": "results/audit/run_status.json"
+  },
+  "reference": {
+    "sha256": "66ccaa43f9f3d8694c4826d8b999a4e562041637cad3c8c396590fbe78d3d408",
+    "counts": {
+      "raw_rows": 2400,
+      "all_text_available": 1876,
+      "target_following_only": 402,
+      "all_text_empty": 122,
+      "nonempty_target": 2278,
+      "raw_unanimous": 1382,
+      "raw_two_versus_one": 934,
+      "raw_all_different": 84,
+      "raw_binary_majority_positive": 277,
+      "raw_binary_majority_other": 2123,
+      "raw_label_-1": 644,
+      "raw_label_0": 5495,
+      "raw_label_1": 1061,
+      "eligible_unanimous": 1310,
+      "eligible_two_versus_one": 884,
+      "eligible_all_different": 84,
+      "eligible_binary_majority_positive": 256,
+      "eligible_binary_majority_other": 2022,
+      "eligible_rows_with_-1": 483,
+      "eligible_label_-1": 584,
+      "eligible_label_0": 5239,
+      "eligible_label_1": 1011,
+      "normalized_repeated_target_groups": 1,
+      "substantial_target_in_other_context_examples": 960,
+      "substantial_shared_text_affected_examples": 1258,
+      "exact_duplicate_eligible_triplets": 0
+    }
+  },
+  "overlap": {
+    "normalization": "Collapse all Unicode whitespace to single ASCII spaces, strip through split/join, then apply Unicode casefold. Used only for diagnostics.",
+    "minimum_substantial_word_count": 5,
+    "comparison_settings": ["original", "whitespace_casefold"]
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "partition_schema_version": "2B-1.0.0",
+  "input_csv": "AUTALIC.csv",
+  "upstream": {
+    "audit_script": "scripts/audit_dataset.py",
+    "audit_config": "configs/audit.json",
+    "audit_run_status": "results/audit/run_status.json",
+    "audit_summary": "results/audit/summary.json",
+    "audit_manifest": "results/audit/row_manifest.csv",
+    "audit_exclusions": "results/audit/exclusions.csv",
+    "overlap_script": "scripts/review_overlap_groups.py",
+    "overlap_config": "configs/overlap_review.json",
+    "overlap_run_status": "results/overlap_review/run_status.json",
+    "overlap_policy_comparison": "results/overlap_review/policy_comparison.json",
+    "overlap_group_membership": "results/overlap_review/group_membership.csv",
+    "overlap_group_summary": "results/overlap_review/group_summary.csv",
+    "overlap_manual_review": "results/overlap_review/manual_review.csv"
+  },
+  "approved_grouping_policy": {
+    "name": "Rule B: all nonempty exact normalized field overlap",
+    "approval_source": "User approval communicated in the Phase 2B implementation prompt",
+    "supporting_review": "Assistant-assisted source-text inspection; not a claim that the user personally completed every Phase 2A manual-review case",
+    "normalization": "\" \".join(text.split()).casefold()",
+    "limitation": "Exact-overlap proxy for leakage control; may overgroup generic phrases and does not reconstruct posts or eliminate all leakage"
+  },
+  "label_policy": {
+    "positive_vote": "annotation == 1",
+    "hard_label": "1 when at least two of three annotations equal 1; otherwise 0",
+    "hard_zero_meaning": "no majority ableist annotation under this benchmark mapping",
+    "soft_positive": "positive_vote_count / 3",
+    "soft_other": "1 - soft_positive",
+    "binary_other_votes": [-1, 0]
+  },
+  "partitions": {
+    "train": 0.70,
+    "dev_tune": 0.075,
+    "dev_calibration": 0.075,
+    "test": 0.15
+  },
+  "outer_split_mapping": {
+    "train": "train",
+    "dev_tune": "validation",
+    "dev_calibration": "validation",
+    "test": "test"
+  },
+  "allocation": {
+    "base_seed": 42,
+    "candidate_budget": 256,
+    "candidate_seed_stride": 1000003,
+    "objective": "Sum across partitions and the example, hard-positive, and hard-other counts of squared count deviation divided by max(target_count, 1)",
+    "example_fraction_tolerance": 0.02,
+    "positive_rate_tolerance": 0.03,
+    "require_both_hard_classes": true
+  },
+  "reference_observations": {
+    "eligible_examples": 2278,
+    "excluded_examples": 122,
+    "hard_positive_examples": 256,
+    "hard_other_examples": 2022,
+    "rule_b_groups": 1425,
+    "rule_b_singletons": 988,
+    "rule_b_largest_group": 22
+  },
+  "outputs": {
+    "targets": "results/partitions/targets.csv",
+    "split_manifest": "results/partitions/split_manifest.csv",
+    "split_summary": "results/partitions/split_summary.json",
+    "run_status": "results/partitions/run_status.json",
+    "report": "reports/phase_02b_partitions.md"
+  }
+}

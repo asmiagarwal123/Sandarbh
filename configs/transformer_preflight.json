@@ -1,0 +1,70 @@
+{
+  "preflight_schema_version": "4A-1.0.0",
+  "input_csv": "AUTALIC.csv",
+  "partition_artifacts": {
+    "config": "configs/partition.json",
+    "run_status": "results/partitions/run_status.json",
+    "summary": "results/partitions/split_summary.json",
+    "targets": "results/partitions/targets.csv",
+    "split_manifest": "results/partitions/split_manifest.csv"
+  },
+  "reference_hashes": {
+    "source_sha256": "66ccaa43f9f3d8694c4826d8b999a4e562041637cad3c8c396590fbe78d3d408",
+    "targets_sha256": "e72ca8a447f91428d83e51217cedec90950bb2d2c4dfb64ad1ae338f40e7fd76",
+    "split_manifest_sha256": "fef7b3c036a5841bb13aadf0271f0da18b81f03fa4ca44b86300e3d08463aa76"
+  },
+  "required_partition_fingerprint": "61c9415766e4f7b342eb37df7b09adf2f89cd86f2818ee05645ae9409dbbba86",
+  "tokenization_partition_allowlist": ["train", "dev_tune"],
+  "model": {
+    "repository": "distilbert/distilroberta-base",
+    "revision": "fb53ab8802853c8e4fbdbcd0529f21fc6f459b2b",
+    "trust_remote_code": false,
+    "use_safetensors": true,
+    "num_labels": 2
+  },
+  "diagnostics": {
+    "sequence_lengths": [256, 512],
+    "normalization": "\" \".join(text.split())",
+    "preserve_case": true,
+    "ordinary_context_separator": "\\n",
+    "percentile_method": "linear interpolation"
+  },
+  "proposed_input_policy": {
+    "sequence_length": 256,
+    "markers": {
+      "preceding": "Preceding context:\n",
+      "target": "Target:\n",
+      "following": "Following context:\n"
+    },
+    "overlong_target": "retain the leftmost target-token prefix after reserving all special-token and marker tokens",
+    "context_allocation": "split remaining tokens equally; preceding keeps its tail and following keeps its head; redistribute unused slots deterministically"
+  },
+  "benchmark": {
+    "seed": 42,
+    "sequence_length": 256,
+    "microbatch_sizes": [1, 2],
+    "precision": "float32",
+    "warmup_steps": 1,
+    "timed_steps": 3,
+    "per_configuration_timeout_seconds": 150,
+    "overall_timeout_seconds": 300,
+    "epochs_for_estimate": 3,
+    "training_examples": 1595
+  },
+  "installation": {
+    "python": "3.14.0",
+    "torch_version": "2.14.1+cpu",
+    "torch_wheel_source": "https://download.pytorch.org/whl/cpu",
+    "torch_install_command": ".\\.venv-transformers\\Scripts\\python.exe -m pip install --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.14.1",
+    "transformers_install_command": ".\\.venv-transformers\\Scripts\\python.exe -m pip install --only-binary=:all: --index-url https://pypi.org/simple transformers==5.18.0 safetensors psutil"
+  },
+  "outputs": {
+    "environment": "results/transformer_preflight/environment.json",
+    "token_length_summary": "results/transformer_preflight/token_length_summary.json",
+    "truncation_examples": "results/transformer_preflight/truncation_examples.csv",
+    "benchmark": "results/transformer_preflight/benchmark.json",
+    "run_manifest": "results/transformer_preflight/run_manifest.json",
+    "run_status": "results/transformer_preflight/run_status.json",
+    "report": "reports/phase_04a_transformer_preflight.md"
+  }
+}
