@@ -97,3 +97,9 @@ Generated artifacts contain IDs, targets, grouping, and partition roles but no r
 - Calibration family and fitting procedure.
 - Selective-prediction thresholds or selection method.
 - Metrics, uncertainty intervals, and final locked-test reporting rules.
+
+## Phase 6 and Phase 7 closure
+
+The Phase 5C successor policy, canonical SHA-256 `b5765e9431a4bf01e8abfeeec1762061b1c0a26eec4ea26c326abb7245ac7541`, governed the first and only locked-test evaluation. The permanent receipt predates test text loading and prohibits changes to scientific logic. Phase 6 used all frozen E1–E7 systems and DUMMY, the frozen temperatures and 0.60 selective operating point, and 5,000 paired complete-Rule-B-group bootstrap replicates. Its read-only validator passed all 42 checks.
+
+Phase 7 is interpretation-only: it generates aggregate tables, figures, a final report, and a local research-demonstration UI from the saved validated results. It does not rerun test inference, inspect individual test examples, select a winner, refit calibration, or modify any frozen decision. The UI applies the same frozen E5–E7 checkpoint/input/calibration policy to user-supplied text and does not expose the dataset. Neither the locked results nor the UI support causal, clinical, safety, diagnostic, moderation-readiness, or deployment-readiness claims.

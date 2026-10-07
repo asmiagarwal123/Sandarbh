@@ -1,0 +1,80 @@
+{
+  "policy_schema_version": "5B-1.0.0",
+  "evidence": {
+    "source": "AUTALIC.csv",
+    "partition_config": "configs/partition.json",
+    "split_manifest": "results/partitions/split_manifest.csv",
+    "targets": "results/partitions/targets.csv",
+    "partition_status": "results/partitions/run_status.json",
+    "transformer_config": "configs/transformer_training.json",
+    "transformer_status": "results/transformers/run_status.json",
+    "transformer_manifest": "results/transformers/run_manifest.json",
+    "phase5a_config": "configs/calibration_review.json",
+    "phase5a_status": "results/calibration_review/run_status.json",
+    "phase5a_manifest": "results/calibration_review/run_manifest.json",
+    "phase5a_predictions": "results/calibration_review/dev_calibration_predictions.csv",
+    "phase5a_parameters": "results/calibration_review/calibration_parameters.json",
+    "phase5a_metrics": "results/calibration_review/calibration_metrics.csv",
+    "phase5a_risk_coverage": "results/calibration_review/risk_coverage.csv",
+    "phase5a_policy_candidates": "results/calibration_review/policy_candidates.json",
+    "phase5a_validation": "results/calibration_review/validation_summary.json",
+    "phase5a_report": "reports/phase_05a_calibration_review.md"
+  },
+  "reference": {
+    "source_sha256": "66ccaa43f9f3d8694c4826d8b999a4e562041637cad3c8c396590fbe78d3d408",
+    "partition_fingerprint": "61c9415766e4f7b342eb37df7b09adf2f89cd86f2818ee05645ae9409dbbba86",
+    "split_manifest_sha256": "fef7b3c036a5841bb13aadf0271f0da18b81f03fa4ca44b86300e3d08463aa76",
+    "targets_sha256": "e72ca8a447f91428d83e51217cedec90950bb2d2c4dfb64ad1ae338f40e7fd76",
+    "transformer_manifest_sha256": "e5c7150a3990503cedaedc8649f01d5e6820c730e0e009c5b08260cbbdc9de06",
+    "phase5a_manifest_sha256": "9a958b2311a2e369e2fdccdedbfb8e2e41b0e3105fa374662bddfc6a25a9a140",
+    "phase5a_predictions_sha256": "9e173238efab29b8024b8f478c8c985424c7a57c9bdef2fdff836ff93bb65d72",
+    "phase5a_parameters_sha256": "19b16aa8fa0b07f6069cdc5b3bff8f37a9996b03efa06ce722b037d05503c302",
+    "phase5a_metrics_sha256": "965619cd844c60d9dca0f8101f8f0295cbe7fb39d2ab35773c6145c81ad226f2",
+    "phase5a_report_sha256": "56790bad5b7db270117f0686552a4f5d8edb868cc50fbd558cbc0a7943c69a67"
+  },
+  "experiments": [
+    {"experiment_id": "E5", "seed": 42, "selected_epoch": 3, "input_mode": "target", "training_target": "hard_label", "checkpoint": "models/transformers/E5_seed42", "temperature": 1.0237168508133028},
+    {"experiment_id": "E6", "seed": 42, "selected_epoch": 2, "input_mode": "context", "training_target": "hard_label", "checkpoint": "models/transformers/E6_seed42", "temperature": 0.6020567132971402},
+    {"experiment_id": "E7", "seed": 42, "selected_epoch": 2, "input_mode": "context", "training_target": "soft_vote_fraction", "checkpoint": "models/transformers/E7_seed42", "temperature": 0.6154062772305571}
+  ],
+  "calibration": {"method": "scalar_temperature_scaling", "formula": "calibrated_probabilities = softmax(original_logits / temperature)", "retain_uncalibrated_probabilities": true},
+  "classification": {"primary_rule": "argmax_calibrated_probabilities", "equivalent_positive_probability_threshold": 0.50, "coverage": 1.0, "abstention": "none", "positive_threshold_optimization": false},
+  "selective_prediction": {"confidence_definition": "max(calibrated_probability_0, calibrated_probability_1)", "shared_operating_threshold": 0.60, "accept_rule": "confidence >= 0.60", "abstain_rule": "confidence < 0.60", "descriptive_thresholds": [0.50, 0.60, 0.70, 0.80], "full_descriptive_grid_start": 0.50, "full_descriptive_grid_end": 0.99, "full_descriptive_grid_step": 0.01, "safety_guarantee": false},
+  "metrics": {
+    "primary": "macro_f1_labels_0_1",
+    "classification": ["macro_f1", "positive_precision", "positive_recall", "positive_f1", "negative_precision", "negative_recall", "negative_f1", "accuracy", "balanced_accuracy", "confusion_matrix_0_1", "support_0_1", "predicted_positive_count", "roc_auc", "average_precision"],
+    "probability": ["negative_log_likelihood", "brier_score", "expected_calibration_error", "reliability_bins", "roc_auc", "average_precision"],
+    "soft_target_descriptive": ["soft_cross_entropy", "soft_brier_score", "soft_positive_mean_absolute_difference"],
+    "selective": ["total_examples", "accepted_examples", "abstained_examples", "coverage", "abstention_rate", "accepted_correct_predictions", "accepted_errors", "selective_risk", "accepted_accuracy", "accepted_confusion_matrix_0_1", "accepted_macro_f1", "positive_label_coverage", "negative_label_coverage", "accepted_true_positive_labelled_examples", "accepted_true_negative_labelled_examples", "accepted_predicted_positive_count", "accepted_positive_precision", "overall_positive_recall_with_abstentions", "selective_risk_wilson_95_interval"]
+  },
+  "definitions": {
+    "ece": {"bin_count": 10, "binning": "equal_width_positive_probability", "intervals": "[i/10,(i+1)/10), final bin includes 1.0", "empty_bin_value": null},
+    "selective_risk": "accepted_errors / accepted_examples; unavailable when accepted_examples is zero",
+    "hard_label_zero": "no majority ableist annotation under this benchmark mapping; not a definitive safe or non-ableist judgment",
+    "soft_target": "annotator vote fraction used descriptively; not a ground-truth probability"
+  },
+  "comparisons": [
+    {"contrast": "E6-E5", "interpretation": "descriptive effect of adding context under hard-label training"},
+    {"contrast": "E7-E6", "interpretation": "descriptive effect of soft-label rather than hard-label training with identical contextual inputs"}
+  ],
+  "comparison_metrics": ["macro_f1", "positive_f1", "positive_recall", "balanced_accuracy", "accuracy", "negative_log_likelihood", "brier_score", "expected_calibration_error", "roc_auc", "average_precision", "soft_brier_score", "soft_cross_entropy"],
+  "uncertainty": {"method": "paired_cluster_bootstrap", "cluster_variable": "group_id", "cluster_source": "results/partitions/split_manifest.csv", "replicates": 5000, "confidence_level": 0.95, "interval_type": "percentile", "random_seed": 20261006, "resample_until_valid": false, "unavailable_values_are_zero": false},
+  "interpretation_restrictions": [
+    "development and calibration metrics are not final test performance",
+    "do not choose a model because it has the best test score",
+    "report E5, E6, and E7",
+    "answer context using E6-E5",
+    "answer soft-label training using E7-E6",
+    "answer calibration using uncalibrated versus calibrated probability metrics",
+    "answer selective prediction using frozen 0.60 and predeclared descriptive thresholds",
+    "report adverse tradeoffs including reduced positive-label coverage",
+    "hard label 0 is not definitively safe or non-ableist",
+    "soft vote fractions are not true probabilities",
+    "do not claim deployment readiness",
+    "do not generalize beyond AUTALIC and the frozen partition without qualification",
+    "do not modify thresholds, temperatures, models, or metrics after test access",
+    "evaluate the test partition only once under the frozen policy"
+  ],
+  "decisions": {"all_three_experiments_proceed": true, "overall_winner_selected": false, "test_access_during_freezing": false},
+  "outputs": {"directory": "results/frozen_policy", "run_status": "results/frozen_policy/run_status.json", "frozen_policy": "results/frozen_policy/frozen_policy.json", "run_manifest": "results/frozen_policy/run_manifest.json", "validation_summary": "results/frozen_policy/validation_summary.json"}
+}

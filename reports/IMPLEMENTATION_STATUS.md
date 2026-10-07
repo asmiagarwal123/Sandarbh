@@ -153,3 +153,52 @@ Codex created the isolated `.venv-transformers` environment with CPython 3.14.0,
 The Phase 2B and Phase 3 saved-run validators passed before preflight. Eleven focused Phase 4A tests passed. Real tokenizer diagnostics inspected exactly 1,595 `train` and 171 `dev_tune` examples. The bounded synthetic length-256 CPU benchmark completed for FP32 microbatches 1 and 2, and the explicit output/provenance validator passed all checks.
 
 Phase 4A status is `COMPLETED` and functionally feasible on CPU, with a proposed—not yet approved or trained—256-token target-preserving policy. No AUTALIC transformer fine-tuning, real prediction, `dev_calibration`/`test` tokenization, calibration, threshold selection, or final evaluation occurred. Synthetic updated weights and optimizer state were discarded.
+
+## Phase 4B transformer training checkpoint
+
+On 2026-10-05, Codex completed all nine fixed DistilRoBERTa CPU runs: E5, E6, and E7 with seeds 42, 43, and 44 for three epochs each. All runs fitted only the 1,595-example training partition and evaluated checkpoints only on the 171-example `dev_tune` partition. The independently reconstructed Phase 4B validator passed all 17 checks, and the frozen-partition, saved-baseline, and Phase 4A validators also passed after training.
+
+The run status is `COMPLETED`. Exactly the selected seed-42 checkpoints for E5, E6, and E7 are retained; robustness-seed weights are absent. Saved outputs contain no raw source sentences or decoded token text. No `dev_calibration` or test inference, probability calibration, threshold tuning, selective prediction, ensembling, or final evaluation occurred. All reported Phase 4B scores are unstable descriptive `dev_tune` results, not final test performance.
+
+## Phase 5A implementation checkpoint
+
+Codex added the fixed calibration-review configuration, CPU inference/calibration runner, independent saved-output validator, synthetic tests, and protocol. The implementation is restricted to the frozen `dev_calibration` IDs and the predesignated seed-42 checkpoints. It provides identity and scalar-temperature probabilities, ten-bin reliability evidence, the fixed 0.50–0.99 selective-prediction grid, and unapproved descriptive policy candidates. Real-run and validation outcomes are recorded below only after execution.
+
+## Phase 5A execution checkpoint
+
+On 2026-10-06, Codex ran E5, E6, and E7 seed 42 on exactly 171 frozen `dev_calibration` examples (19 hard positives) using CPU FP32 inference. It fitted one bounded scalar temperature per model and generated 513 text-free prediction rows, six metric rows, 60 reliability-bin rows, and 300 risk-coverage rows. E6/E7 input IDs and masks were identical, all argmax predictions were preserved, and the maximum reconstructed sequence length was 190.
+
+The independent Phase 5A validator passed all 30 checks. Focused tests passed 27/27; full baseline-environment discovery passed 115 tests with three expected PyTorch-only skips; all required upstream validators and `pip check` passed. The computational status is `COMPLETED`, while `policy_status` remains `PENDING_RESEARCHER_REVIEW`. No test access, final model selection, or final policy selection occurred.
+
+## Phase 5B implementation checkpoint
+
+The research controller approved all three seed-42 experiments for final evaluation and specified uniform scalar temperature scaling, calibrated argmax as the full-coverage primary rule, shared calibrated confidence 0.60 as the secondary selective operating point, fixed descriptive thresholds, required metrics/comparisons, and a 5,000-replicate paired Rule B group bootstrap. Codex added the machine-readable policy configuration, freezer, read-only validator, synthetic tests, and frozen-policy protocol. Execution results are recorded after successful freezing; no test access or Phase 6 work is permitted here.
+
+## Phase 5B execution checkpoint
+
+On 2026-10-06, Codex first corrected only the Phase 5A Markdown temperature presentation: uncalibrated rows now show identity temperature 1.0 and scaled rows show their fitted values. No inference or calibration was rerun, all numerical Phase 5A hashes remained identical, and the Phase 5A validator again passed 30/30 checks.
+
+The final-evaluation policy then froze successfully with status `COMPLETED`, policy status `FROZEN`, test status `NOT_ACCESSED`, and canonical policy SHA-256 `9c420cd4600bb50246977390aebe399aea143b836956a691e35c18d709db8f0c`. The independent read-only Phase 5B validator passed all 30 checks. Focused Phase 5B tests passed 21/21; full project discovery passed 137 tests with three expected PyTorch-only skips in the baseline environment. No test IDs, labels, text, tokenization, inference, predictions, or metrics were accessed or created.
+
+## Phase 5C implementation checkpoint
+
+Before any test access, the research controller authorized an explicit `5B-1.1.0` successor adding all four previously frozen Phase 3 baselines and the deterministic majority-class dummy. The original Phase 5B policy remains preserved. Codex added the amendment configuration, atomic amendment generator, read-only validator, synthetic tests, and protocol. No baseline or transformer model is loaded, retrained, recalibrated, or evaluated during amendment.
+
+## Phase 5C execution checkpoint
+
+The successor policy froze successfully with status `COMPLETED`, policy status `FROZEN`, test status `NOT_ACCESSED`, and canonical SHA-256 `b5765e9431a4bf01e8abfeeec1762061b1c0a26eec4ea26c326abb7245ac7541`. It explicitly supersedes original policy `9c420cd4600bb50246977390aebe399aea143b836956a691e35c18d709db8f0c`, whose files remain byte-identical. The independent read-only amendment validator passed 31/31 checks. Focused amendment tests passed 20/20 and final full discovery passed 157 tests with three expected PyTorch-only skips. No test access, inference, retraining, recalibration, or model mutation occurred.
+# Phase 6
+
+Phase 6 is complete. The locked test was evaluated once under the frozen successor policy and independently validated 42/42. The permanent receipt in `results/final_test/test_access_receipt.json` is authoritative and must never be deleted or overwritten.
+
+## V1.1 final forensic validation and maintenance release
+
+On 2026-10-07, V1.1 added only audit/release code, tests, documentation, UI presentation wording, and text-free derivative analyses. The immutable scientific inventory is covered by pre/post SHA-256 manifests. E7 was confirmed to optimize class-weighted soft cross-entropy; token truncation was confirmed as target-preserving head/ellipsis/tail with deterministic nearest-context allocation; probability skill was compared with a train-prevalence constant; and local/paper dataset discrepancies were documented. Historical results were not rewritten.
+
+The UI now separates predicted class, model-estimated temperature-scaled probability, confidence, and review status; it removes approval-sounding `ACCEPTED` wording and adds prevalence, model-specific precision/recall, domain, imbalance, moderation, and reclaimed/quoted/sarcastic-language warnings. Synthetic cases are software smoke tests only.
+
+The release status is authoritative in `results/v1_1_validation/run_status.json`. `PROJECT_HANDOFF_V1_1.md` and `Prompt_Packages/Prompt_06_V1_1_Final_Validation` are the V1.1 handoff entry points. No Version 2 experiment was performed.
+
+## Phase 7 and UI
+
+Phase 7 final research consolidation and the Streamlit research UI are complete. `reports/FINAL_RESEARCH_REPORT.md`, `results/final/final_summary.json`, eight generated tables, and six figures in PNG and SVG derive from the validated Phase 6 outputs. The UI exposes only user-entered inference and aggregate results, uses frozen E5–E7 checkpoints and temperatures, and defaults neutrally to E6 without test-based selection. Focused UI tests, real inference smoke testing, controlled server startup, and the final 39-check project validator passed. The flattened final handoff package was hash-verified.

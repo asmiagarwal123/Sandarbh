@@ -1,0 +1,124 @@
+{
+  "training_schema_version": "4B-1.0.0",
+  "input_csv": "AUTALIC.csv",
+  "partition_artifacts": {
+    "config": "configs/partition.json",
+    "run_status": "results/partitions/run_status.json",
+    "summary": "results/partitions/split_summary.json",
+    "targets": "results/partitions/targets.csv",
+    "split_manifest": "results/partitions/split_manifest.csv"
+  },
+  "baseline_artifacts": {
+    "config": "configs/baselines.json",
+    "run_manifest": "results/baselines/run_manifest.json",
+    "run_status": "results/baselines/run_status.json"
+  },
+  "preflight_artifacts": {
+    "config": "configs/transformer_preflight.json",
+    "environment": "results/transformer_preflight/environment.json",
+    "token_length_summary": "results/transformer_preflight/token_length_summary.json",
+    "truncation_examples": "results/transformer_preflight/truncation_examples.csv",
+    "benchmark": "results/transformer_preflight/benchmark.json",
+    "run_manifest": "results/transformer_preflight/run_manifest.json",
+    "run_status": "results/transformer_preflight/run_status.json",
+    "report": "reports/phase_04a_transformer_preflight.md"
+  },
+  "reference": {
+    "source_sha256": "66ccaa43f9f3d8694c4826d8b999a4e562041637cad3c8c396590fbe78d3d408",
+    "targets_sha256": "e72ca8a447f91428d83e51217cedec90950bb2d2c4dfb64ad1ae338f40e7fd76",
+    "split_manifest_sha256": "fef7b3c036a5841bb13aadf0271f0da18b81f03fa4ca44b86300e3d08463aa76",
+    "partition_fingerprint": "61c9415766e4f7b342eb37df7b09adf2f89cd86f2818ee05645ae9409dbbba86",
+    "preflight_config_sha256": "b873fbeefb68c590e70e5f1640c16461051130a5c1677d07a1fe84dd90e0b89f",
+    "preflight_environment_sha256": "ea8a3606e8bcb8833f5f71a32741150bd8a6ddc0ba8c7fd31cfd48c27e39681b",
+    "preflight_token_length_summary_sha256": "e8999d74df6f027bde5fa45c5b1363eda8b6257de42cd0605984bcc63d708a72",
+    "preflight_truncation_examples_sha256": "9e5fd01dec472ffc01d2b31aa898c6c3779e7c4ee4f0d79aac18863d709cafde",
+    "preflight_benchmark_sha256": "6d42680e50cbabe28cda386c71c4eaed768927b085c7a66c7412753e1936783d",
+    "preflight_run_manifest_sha256": "25ae495e0d9f3747cf8b9a312997b065ad11c03c25d09b245d5a30d8e6e937ef",
+    "preflight_run_status_sha256": "e2aad8ee5036a6ba3228a2f454bd32ee731c9e6c0fbddf8b262f3679264dd0e9",
+    "preflight_report_sha256": "f8de138d7ad8d02e6468c6c77ee9890215e3dd616d987d26a65d198b20e6b60e"
+  },
+  "model": {
+    "repository": "distilbert/distilroberta-base",
+    "revision": "fb53ab8802853c8e4fbdbcd0529f21fc6f459b2b",
+    "weight_format": "safetensors",
+    "trust_remote_code": false,
+    "num_labels": 2
+  },
+  "access": {
+    "training_partition": "train",
+    "selection_partition": "dev_tune",
+    "allowed_partitions": ["train", "dev_tune"],
+    "forbidden_partitions": ["dev_calibration", "test"]
+  },
+  "input_construction": {
+    "normalization": "\" \".join(text.split())",
+    "preserve_case": true,
+    "maximum_sequence_length": 256,
+    "expected_outer_special_tokens": 2,
+    "expected_target_content_budget": 241,
+    "markers": {
+      "preceding": "Preceding context:\n",
+      "target": "Target:\n",
+      "following": "Following context:\n"
+    },
+    "overlong_target_ellipsis": " …",
+    "overlong_target_policy": "beginning plus tokenized ellipsis plus ending; beginning receives an odd extra token",
+    "preceding_retention": "tail nearest target",
+    "following_retention": "head nearest target"
+  },
+  "experiments": [
+    {"experiment_id": "E5", "input_mode": "target", "loss": "weighted_hard_cross_entropy"},
+    {"experiment_id": "E6", "input_mode": "context", "loss": "weighted_hard_cross_entropy"},
+    {"experiment_id": "E7", "input_mode": "context", "loss": "weighted_soft_cross_entropy"}
+  ],
+  "training": {
+    "seeds": [42, 43, 44],
+    "primary_seed": 42,
+    "epochs": 3,
+    "microbatch_size": 2,
+    "gradient_accumulation_steps": 8,
+    "effective_batch_size": 16,
+    "learning_rate": 0.00002,
+    "weight_decay": 0.01,
+    "gradient_clipping_norm": 1.0,
+    "warmup_ratio": 0.10,
+    "scheduler": "linear decay after warmup",
+    "precision": "float32",
+    "device": "cpu",
+    "dynamic_padding": true,
+    "gradient_checkpointing": false,
+    "parameter_freezing": false,
+    "early_stopping": false,
+    "deterministic_algorithms_warn_only": true
+  },
+  "class_weights": {
+    "formula": "training_examples / (2 * class_count)",
+    "expected_train_examples": 1595,
+    "expected_class_counts_0_1": [1415, 180]
+  },
+  "selection": {
+    "primary": "highest exact unrounded dev_tune macro-F1 over labels [0, 1]",
+    "tie_break": "earliest epoch",
+    "prediction_rule": "native argmax over two logits",
+    "threshold_tuning": false
+  },
+  "calibration_description": {
+    "ece_bin_count": 10,
+    "ece_binning": "equal-width positive-probability bins [i/10,(i+1)/10), with the final bin including 1.0",
+    "interpretation": "descriptive development estimate only"
+  },
+  "outputs": {
+    "directory": "results/transformers",
+    "units_directory": "results/transformers/units",
+    "tokenization_manifest": "results/transformers/tokenization_manifest.csv",
+    "epoch_metrics": "results/transformers/epoch_metrics.csv",
+    "selected_checkpoint_metrics": "results/transformers/selected_checkpoint_metrics.csv",
+    "dev_tune_predictions": "results/transformers/dev_tune_predictions.csv",
+    "seed_summary": "results/transformers/seed_summary.json",
+    "comparisons": "results/transformers/comparisons.json",
+    "run_manifest": "results/transformers/run_manifest.json",
+    "run_status": "results/transformers/run_status.json",
+    "report": "reports/phase_04b_transformers.md",
+    "checkpoint_root": "models/transformers"
+  }
+}

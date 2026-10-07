@@ -1,0 +1,29 @@
+{
+  "schema_version": "6.0.0",
+  "authorized_successor_policy_sha256": "b5765e9431a4bf01e8abfeeec1762061b1c0a26eec4ea26c326abb7245ac7541",
+  "superseded_policy_sha256": "9c420cd4600bb50246977390aebe399aea143b836956a691e35c18d709db8f0c",
+  "source": "AUTALIC.csv",
+  "source_sha256": "66ccaa43f9f3d8694c4826d8b999a4e562041637cad3c8c396590fbe78d3d408",
+  "partition_fingerprint": "61c9415766e4f7b342eb37df7b09adf2f89cd86f2818ee05645ae9409dbbba86",
+  "split_manifest": "results/partitions/split_manifest.csv",
+  "split_manifest_sha256": "fef7b3c036a5841bb13aadf0271f0da18b81f03fa4ca44b86300e3d08463aa76",
+  "targets": "results/partitions/targets.csv",
+  "targets_sha256": "e72ca8a447f91428d83e51217cedec90950bb2d2c4dfb64ad1ae338f40e7fd76",
+  "successor_policy": "results/frozen_policy_v1_1/frozen_policy.json",
+  "expected_test": {"examples": 341, "hard_positive": 38, "hard_other": 303},
+  "baseline_python": ".venv/Scripts/python.exe",
+  "baseline_models": {
+    "E1": {"path":"models/baselines/E1_pipeline.joblib","sha256":"1e87824ca409500932348c0f0d9992f60e14b1fac36b598a40318cef9df67bd3","input_mode":"target","score_type":"native_positive_probability"},
+    "E2": {"path":"models/baselines/E2_pipeline.joblib","sha256":"4a97c435c77235f019c5328fe8c7fb1025807418402d85c71f35ad76cbff7c2d","input_mode":"context","score_type":"native_positive_probability"},
+    "E3": {"path":"models/baselines/E3_pipeline.joblib","sha256":"13a0d8544e1d61fc58dc53222137e1d7b05d381cc93bcf172dac67fcef3521a1","input_mode":"target","score_type":"decision_margin"},
+    "E4": {"path":"models/baselines/E4_pipeline.joblib","sha256":"076895be3321c70a379970414e1a790bddad8638485978b971d794fcf6bb1c29","input_mode":"context","score_type":"decision_margin"}
+  },
+  "transformers": {
+    "E5": {"path":"models/transformers/E5_seed42","model_sha256":"96c100bfce0c547f385636ecc9f15b6e2772cf7ca3d995442543ec9aecb0ba9e","input_mode":"target","seed":42,"selected_epoch":3,"temperature":1.0237168508133028},
+    "E6": {"path":"models/transformers/E6_seed42","model_sha256":"ff5d477ab875e5d487f1fee9c329c419bdfdaecf50e15da2f5edda3f250c4b49","input_mode":"context","seed":42,"selected_epoch":2,"temperature":0.6020567132971402},
+    "E7": {"path":"models/transformers/E7_seed42","model_sha256":"ea85aef0135587f1390de5e8ed5f6b6ab7f342136bf263184c2ce212ba4e29a2","input_mode":"context","seed":42,"selected_epoch":2,"temperature":0.6154062772305571}
+  },
+  "selective_thresholds": {"start":0.50,"end":0.99,"step":0.01,"frozen_primary":0.60},
+  "bootstrap": {"method":"paired_cluster_bootstrap","cluster":"group_id","replicates":5000,"seed":20261006,"confidence":0.95,"interval":"percentile","resample_until_valid":false,"p_values":false},
+  "outputs": {"directory":"results/final_test","report":"reports/phase_06_final_test_results.md"}
+}

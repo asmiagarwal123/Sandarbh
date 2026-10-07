@@ -1,0 +1,16 @@
+name: synthetic-unit-tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  text-free-ui-tests:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - name: Run artifact-independent synthetic tests
+        run: python -m unittest tests.test_ui -v

@@ -1,0 +1,54 @@
+{
+  "schema_version": "5B-1.1.0",
+  "supersedes_policy_sha256": "9c420cd4600bb50246977390aebe399aea143b836956a691e35c18d709db8f0c",
+  "amendment_reason": "add previously frozen Phase 3 baselines before first test access",
+  "original_policy": {
+    "config": "configs/final_evaluation_policy.json",
+    "run_status": "results/frozen_policy/run_status.json",
+    "frozen_policy": "results/frozen_policy/frozen_policy.json",
+    "run_manifest": "results/frozen_policy/run_manifest.json",
+    "validation_summary": "results/frozen_policy/validation_summary.json"
+  },
+  "original_policy_file_hashes": {
+    "config": "2b340cbacda40c313d5103797cf9ba809c53086aa6934bd12d4a723fc35b132d",
+    "run_status": "7dc853638220ceb06cd17345739ea486fdf5969589bfe2a5cf367b8345c1debf",
+    "frozen_policy": "adb5df833ded827888179153a1197384a614b4fe18f02a3c4d7188aaf9817cc8",
+    "run_manifest": "d289277bc9405359ded80ae4182b6493055a1c38227c68fad77600d130a497d1",
+    "validation_summary": "4f99910b5fa4ac533688dbe820945829b947dd730d82cfd7e50c634fc5c84fbf"
+  },
+  "baseline_evidence": {
+    "config": "configs/baselines.json",
+    "run_status": "results/baselines/run_status.json",
+    "run_manifest": "results/baselines/run_manifest.json",
+    "candidate_metrics": "results/baselines/candidate_metrics.csv",
+    "dev_predictions": "results/baselines/dev_tune_predictions.csv",
+    "dummy_metrics": "results/baselines/dummy_metrics.json",
+    "selected_models": "results/baselines/selected_models.json",
+    "protocol": "reports/PHASE_03_BASELINE_PROTOCOL.md",
+    "report": "reports/phase_03_baselines.md",
+    "requirements": "requirements-baselines.txt"
+  },
+  "baseline_reference_hashes": {
+    "config": "26a3619730713a8d0c5f133d223569efd3b3e0a80a946f47e6386e3b73e83ee6",
+    "run_manifest": "72c0ea2ea5f13804193a8641044b84df53c18cb798a3201c189154d579eafbb5",
+    "selected_models": "8e482e381391ac6d961f8823929b42ebbbaea41fd90700324e5e58dd9062452d"
+  },
+  "baselines": [
+    {"experiment_id":"E1","model_family":"tfidf_logistic_regression","classifier":"logistic_regression","input_mode":"target","training_target":"hard_label","candidate_id":"C=10|class_weight=balanced","C":10.0,"class_weight":"balanced","pipeline":"models/baselines/E1_pipeline.joblib","pipeline_sha256":"1e87824ca409500932348c0f0d9992f60e14b1fac36b598a40318cef9df67bd3","prediction_interface":"predict","continuous_score_interface":"predict_proba_positive_class","continuous_score_semantics":"native_uncalibrated_probability","probability_metrics":["negative_log_likelihood","brier_score"],"ranking_metrics":["roc_auc","average_precision"]},
+    {"experiment_id":"E2","model_family":"tfidf_logistic_regression","classifier":"logistic_regression","input_mode":"context","training_target":"hard_label","candidate_id":"C=0.1|class_weight=balanced","C":0.1,"class_weight":"balanced","pipeline":"models/baselines/E2_pipeline.joblib","pipeline_sha256":"4a97c435c77235f019c5328fe8c7fb1025807418402d85c71f35ad76cbff7c2d","prediction_interface":"predict","continuous_score_interface":"predict_proba_positive_class","continuous_score_semantics":"native_uncalibrated_probability","probability_metrics":["negative_log_likelihood","brier_score"],"ranking_metrics":["roc_auc","average_precision"]},
+    {"experiment_id":"E3","model_family":"tfidf_linear_svc","classifier":"linear_svc","input_mode":"target","training_target":"hard_label","candidate_id":"C=0.1|class_weight=balanced","C":0.1,"class_weight":"balanced","pipeline":"models/baselines/E3_pipeline.joblib","pipeline_sha256":"13a0d8544e1d61fc58dc53222137e1d7b05d381cc93bcf172dac67fcef3521a1","prediction_interface":"predict","continuous_score_interface":"decision_function","continuous_score_semantics":"signed_margin_not_probability","probability_metrics":[],"ranking_metrics":["roc_auc","average_precision"]},
+    {"experiment_id":"E4","model_family":"tfidf_linear_svc","classifier":"linear_svc","input_mode":"context","training_target":"hard_label","candidate_id":"C=0.1|class_weight=balanced","C":0.1,"class_weight":"balanced","pipeline":"models/baselines/E4_pipeline.joblib","pipeline_sha256":"076895be3321c70a379970414e1a790bddad8638485978b971d794fcf6bb1c29","prediction_interface":"predict","continuous_score_interface":"decision_function","continuous_score_semantics":"signed_margin_not_probability","probability_metrics":[],"ranking_metrics":["roc_auc","average_precision"]}
+  ],
+  "dummy": {"experiment_id":"DUMMY","definition":"always predicts hard label 0","majority_class":0,"training_source":"train majority class","competitive_model":false,"probability_output":null,"continuous_score":null,"probability_metrics":[],"ranking_metrics":[]},
+  "baseline_classification_metrics": ["macro_f1","positive_precision","positive_recall","positive_f1","negative_precision","negative_recall","negative_f1","accuracy","balanced_accuracy","confusion_matrix_0_1","support_0_1","predicted_positive_count"],
+  "added_comparisons": [
+    {"contrast":"E5-E1","interpretation":"target-only transformer versus target-only Logistic Regression"},
+    {"contrast":"E5-E3","interpretation":"target-only transformer versus target-only Linear SVC"},
+    {"contrast":"E6-E2","interpretation":"context transformer versus context Logistic Regression"},
+    {"contrast":"E6-E4","interpretation":"context transformer versus context Linear SVC"}
+  ],
+  "baseline_comparison_metrics": ["macro_f1","positive_f1","positive_recall","balanced_accuracy","accuracy","roc_auc_when_both_available","average_precision_when_both_available"],
+  "bootstrap_extension": {"identical_cluster_samples_across_models":["E1","E2","E3","E4","E5","E6","E7","DUMMY"],"baseline_model_intervals":["macro_f1","positive_f1","positive_recall","balanced_accuracy"],"baseline_difference_intervals":["macro_f1","positive_f1","positive_recall"],"p_values":false,"resample_until_valid":false},
+  "declarations": {"original_policy_preserved":true,"test_not_accessed_before_amendment":true,"no_baseline_retraining":true,"no_winner_selected":true,"successor_is_only_policy_permitted_for_phase6":true},
+  "outputs": {"directory":"results/frozen_policy_v1_1","run_status":"results/frozen_policy_v1_1/run_status.json","frozen_policy":"results/frozen_policy_v1_1/frozen_policy.json","run_manifest":"results/frozen_policy_v1_1/run_manifest.json","validation_summary":"results/frozen_policy_v1_1/validation_summary.json"}
+}

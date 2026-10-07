@@ -115,3 +115,91 @@ Phase 4A uses the separate `.venv-transformers` environment to inspect the pinne
 ```
 
 The observed diagnostics and proposed target-preserving construction are documented in `reports/phase_04a_transformer_preflight.md` and `reports/PHASE_04_TRANSFORMER_PLAN.md`. This recommendation is not approval to begin E5–E7 training.
+
+## Phase 4B: DistilRoBERTa development training
+
+Phase 4B trains the fixed E5 target-only hard-label, E6 context hard-label, and E7 context soft-label configurations sequentially on CPU for seeds 42, 43, and 44. It uses the approved length-256 target-preserving construction and the immutable `distilbert/distilroberta-base` revision from Phase 4A. Seed 42 is predesignated for later stages; seeds 43 and 44 are development robustness runs only.
+
+```powershell
+.\.venv-transformers\Scripts\python.exe -m unittest tests.test_transformer_training -v
+.\.venv-transformers\Scripts\python.exe scripts/train_transformers.py --config configs/transformer_training.json
+.\.venv-transformers\Scripts\python.exe scripts/validate_transformer_run.py --config configs/transformer_training.json
+```
+
+The completed development results and protocol are in `reports/phase_04b_transformers.md` and `reports/PHASE_04B_TRANSFORMER_PROTOCOL.md`. Phase 4B uses only `train` and `dev_tune`; it does not access `dev_calibration` or `test`, perform calibration or threshold tuning, or make a final generalization claim.
+
+## Phase 5A: calibration and selective-prediction review
+
+Phase 5A runs the predesignated E5/E6/E7 seed-42 checkpoints once on the frozen `dev_calibration` partition, fits one scalar temperature per model, and creates text-free reliability, risk-coverage, and candidate-policy evidence. It stops with `PENDING_RESEARCHER_REVIEW`; it does not select a model or policy and does not access the test partition.
+
+```powershell
+.\.venv-transformers\Scripts\python.exe -m unittest tests.test_calibration_review -v
+.\.venv-transformers\Scripts\python.exe scripts/run_calibration_review.py --config configs/calibration_review.json
+.\.venv-transformers\Scripts\python.exe scripts/validate_calibration_review.py --config configs/calibration_review.json
+```
+
+See `reports/PHASE_05_CALIBRATION_PROTOCOL.md` for the locked protocol and `reports/phase_05a_calibration_review.md` for generated apparent fit-set diagnostics.
+
+## Phase 5B: frozen final-evaluation policy
+
+Phase 5B freezes all three seed-42 experiments, their scalar temperatures, calibrated-argmax primary classification, the shared 0.60 selective-confidence threshold, predeclared metrics/comparisons, and a 5,000-replicate paired Rule B group bootstrap. It performs no test access or model computation.
+
+```powershell
+.\.venv-transformers\Scripts\python.exe -m unittest tests.test_frozen_policy -v
+.\.venv-transformers\Scripts\python.exe scripts/freeze_evaluation_policy.py --config configs/final_evaluation_policy.json
+.\.venv-transformers\Scripts\python.exe scripts/validate_frozen_policy.py --config configs/final_evaluation_policy.json
+```
+
+The frozen policy and its canonical SHA-256 identifier are stored under `results/frozen_policy/`. Once frozen, the only permitted next research action is one-time locked-test evaluation under that exact policy.
+
+## Phase 5C: pre-test baseline amendment
+
+Before any test access, Phase 5C creates a versioned `5B-1.1.0` successor policy that retains Phase 5B byte-for-byte and adds the frozen Phase 3 E1–E4 pipelines plus the majority-class dummy to final evaluation. It does not overwrite the original policy or run any model.
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest tests.test_amended_policy -v
+.\.venv\Scripts\python.exe scripts/amend_frozen_policy.py --config configs/final_evaluation_policy_v1_1.json
+.\.venv\Scripts\python.exe scripts/validate_amended_policy.py --config configs/final_evaluation_policy_v1_1.json
+```
+
+After successful validation, the successor under `results/frozen_policy_v1_1/` is the only policy permitted for Phase 6.
+# Phase 6 final evaluation
+
+The frozen Phase 5C successor policy is evaluated exactly once by `scripts/evaluate_locked_test.py`. Use `--preflight-only` before the irreversible `--execute-once` mode. Final, text-free outputs are independently checked by `scripts/validate_final_test_run.py`; the protocol is in `reports/PHASE_06_FINAL_TEST_PROTOCOL.md`.
+
+## Phase 7: final consolidation and local research UI
+
+Phase 6 completed one locked evaluation of 341 test examples under successor policy `b5765e9431a4bf01e8abfeeec1762061b1c0a26eec4ea26c326abb7245ac7541`; its independent validator passed 42/42 checks. Phase 7 interprets those immutable outputs without recomputing predictions or changing the policy. The final report is `reports/FINAL_RESEARCH_REPORT.md`, publication tables are under ignored `results/final/tables/`, and text-free figures are under `reports/figures/`.
+
+The three research questions concern context (classical and transformer target/context contrasts), soft-vote-fraction versus hard-label transformer training, and calibration/selective-prediction trade-offs. Evidence is mixed across metrics. The locked test has only 38 positive-labelled examples; class 0 means no majority positive annotation under the benchmark, not definitively safe or non-ableist.
+
+The local Streamlit UI is a research demonstration of the frozen E5, E6, and E7 checkpoints. E6 is the neutral contextual default, not a test-selected winner. Setup and launch from PowerShell:
+
+```powershell
+.\.venv-transformers\Scripts\python.exe -m pip install -r requirements-ui.txt
+.\.venv-transformers\Scripts\python.exe -m streamlit run app.py
+```
+
+The UI accepts optional preceding/following context and a required target sentence. It applies the exact 256-token input construction, frozen temperature, 0.50 class boundary, and 0.60 confidence threshold. It is not diagnostic, clinical, moderation-ready, or suitable for automated punishment. See `reports/UI_GUIDE.md`.
+
+Final validation commands include:
+
+```powershell
+.\.venv-transformers\Scripts\python.exe -m unittest tests.test_ui tests.test_final_project -v
+.\.venv-transformers\Scripts\python.exe scripts/validate_final_test_run.py --config configs/final_test_evaluation.json
+.\.venv-transformers\Scripts\python.exe scripts/validate_final_project.py
+```
+
+`AUTALIC.csv`, `results/`, `models/`, checkpoints, virtual environments, caches, and Streamlit secrets are excluded from Git. Reproduction requires the original immutable source and locally retained frozen model artifacts.
+
+## Version 1.1 forensic maintenance release
+
+V1.1 (2026-10-07) preserves the complete scientific freeze and adds a forensic integrity validator, mathematical E7 loss audit, exact token-truncation audit, train-prevalence probability reference, dataset provenance review, seed summary, text-free post-hoc diagnostics, safer UI language, reproducibility locks/guidance, model card, research-question registry, Version 2 deferrals, and a hash-verified handoff package. No model was retrained or recalibrated, no partition/policy/checkpoint/prediction changed, and locked-test inference was not rerun.
+
+The central errata are that E7 is a **cost-weighted soft-vote model**, not an unweighted vote-fraction learner; overlong targets retain head and tail around an ellipsis; and none of the available probability-producing frozen models beats the train-prevalence constant on locked-test Brier score. See `reports/V1_1_ERRATA_AND_VALIDATION.md` and `PROJECT_HANDOFF_V1_1.md`.
+
+```powershell
+& .\.venv-transformers\Scripts\python.exe scripts\validate_v1_1.py --run-synthetic-inference --finalize
+```
+
+The 0.60 value remains a research operating point, not a safety threshold. The dashboard is not a moderation system and class 0 does not prove harmlessness or acceptability.

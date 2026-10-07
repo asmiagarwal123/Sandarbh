@@ -1,0 +1,52 @@
+{
+  "calibration_schema_version": "5A-1.0.0",
+  "input_csv": "AUTALIC.csv",
+  "partition_config": "configs/partition.json",
+  "transformer_config": "configs/transformer_training.json",
+  "partition_run_status": "results/partitions/run_status.json",
+  "split_manifest": "results/partitions/split_manifest.csv",
+  "targets": "results/partitions/targets.csv",
+  "transformer_run_status": "results/transformers/run_status.json",
+  "transformer_run_manifest": "results/transformers/run_manifest.json",
+  "transformer_selected_metrics": "results/transformers/selected_checkpoint_metrics.csv",
+  "transformer_tokenization_manifest": "results/transformers/tokenization_manifest.csv",
+  "reference": {
+    "source_sha256": "66ccaa43f9f3d8694c4826d8b999a4e562041637cad3c8c396590fbe78d3d408",
+    "partition_config_sha256": "68a3fb5645416bd715e2fb6c25e2af8dfe8225a2b10a30374cd21049f946ecf6",
+    "transformer_config_sha256": "3aa61283083ed8fdd7ed7c053d9a5612e7a93599e597fd879c4318170d499374",
+    "split_manifest_sha256": "fef7b3c036a5841bb13aadf0271f0da18b81f03fa4ca44b86300e3d08463aa76",
+    "targets_sha256": "e72ca8a447f91428d83e51217cedec90950bb2d2c4dfb64ad1ae338f40e7fd76",
+    "transformer_run_manifest_sha256": "e5c7150a3990503cedaedc8649f01d5e6820c730e0e009c5b08260cbbdc9de06",
+    "transformer_selected_metrics_sha256": "65584d28ba12e5acac9a9806dfaddc1c30bfa08aa53c68c1cf9f61361e3256b7",
+    "transformer_tokenization_manifest_sha256": "2000d74eaa49d7160751bbe14b59b79f3e82f0fefcb3788ef9f50ffba0001859",
+    "partition_fingerprint": "61c9415766e4f7b342eb37df7b09adf2f89cd86f2818ee05645ae9409dbbba86"
+  },
+  "model": {
+    "repository": "distilbert/distilroberta-base",
+    "revision": "fb53ab8802853c8e4fbdbcd0529f21fc6f459b2b",
+    "trust_remote_code": false,
+    "weight_format": "safetensors"
+  },
+  "experiments": [
+    {"experiment_id": "E5", "seed": 42, "input_mode": "target", "checkpoint": "models/transformers/E5_seed42"},
+    {"experiment_id": "E6", "seed": 42, "input_mode": "context", "checkpoint": "models/transformers/E6_seed42"},
+    {"experiment_id": "E7", "seed": 42, "input_mode": "context", "checkpoint": "models/transformers/E7_seed42"}
+  ],
+  "access": {"allowed_inference_partition": "dev_calibration", "forbidden_partitions": ["train", "dev_tune", "test"]},
+  "inference": {"device": "cpu", "precision": "float32", "batch_size": 8, "maximum_sequence_length": 256, "dynamic_padding": true},
+  "calibration": {"method": "scalar_temperature", "objective": "unweighted_hard_label_negative_log_likelihood", "initial_temperature": 1.0, "minimum_temperature": 0.05, "maximum_temperature": 20.0, "optimizer": "golden_section_search_log_temperature", "tolerance": 1e-10, "iteration_limit": 500, "ece_bin_count": 10},
+  "selective_prediction": {"threshold_start": 0.50, "threshold_end": 0.99, "threshold_step": 0.01, "fixed_candidate_thresholds": [0.70, 0.80, 0.90], "coverage_floors": [0.90, 0.80, 0.70], "wilson_confidence": 0.95},
+  "outputs": {
+    "directory": "results/calibration_review",
+    "run_status": "results/calibration_review/run_status.json",
+    "run_manifest": "results/calibration_review/run_manifest.json",
+    "predictions": "results/calibration_review/dev_calibration_predictions.csv",
+    "parameters": "results/calibration_review/calibration_parameters.json",
+    "metrics": "results/calibration_review/calibration_metrics.csv",
+    "reliability_bins": "results/calibration_review/reliability_bins.csv",
+    "risk_coverage": "results/calibration_review/risk_coverage.csv",
+    "policy_candidates": "results/calibration_review/policy_candidates.json",
+    "validation_summary": "results/calibration_review/validation_summary.json",
+    "report": "reports/phase_05a_calibration_review.md"
+  }
+}

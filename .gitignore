@@ -5,11 +5,14 @@ reports/phase_01_dataset_audit.md
 
 # Python environments and caches
 .venv/
+.venv-*/
 venv/
 env/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.cache/
+.streamlit/secrets.toml
 
 # Saved model artifacts (later phases)
 models/
@@ -23,3 +26,8 @@ checkpoints/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Private/generated scientific handoff material
+Prompt_Packages/
+*.log
+*.tmp
